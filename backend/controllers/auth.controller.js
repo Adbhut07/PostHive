@@ -6,11 +6,11 @@ import generateTokenAndSetCookie from '../utils/generateTokenAndSetCookie.js';
 const signupBody = zod.object({
     username: zod.string(),
     email: zod.string().email(),
-	password: zod.string(),
+	password: zod.string().min(6),
     confirmPassword: zod.string(),
 });
 
-export const signup = async (req,res)=>{
+export const signup = async (req,res, next)=>{
     try{
         const { success } = signupBody.safeParse(req.body);
         if(!success){
@@ -45,9 +45,7 @@ export const signup = async (req,res)=>{
           await newUser.save();
 
           res.status(201).json({
-            _id: newUser._id,
-            username: newUser.username,
-            email: newUser.email
+            message: "Signup successful"
           });
         } else {
             res.status(400).json({error: "Invalid user data"});
