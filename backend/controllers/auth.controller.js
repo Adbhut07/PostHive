@@ -10,9 +10,13 @@ const signupBody = zod.object({
     confirmPassword: zod.string(),
 });
 
-export const signup = async (req,res, next)=>{
-    try{
-        const { success } = signupBody.safeParse(req.body);
+const signinBody = zod.object({
+    username: zod.string(),
+	password: zod.string()
+});
+
+export const signup = async (req,res)=>{
+    const { success } = signupBody.safeParse(req.body);
         if(!success){
             return res.status(411).json({
                 message: "Incorrect inputs",
@@ -23,6 +27,7 @@ export const signup = async (req,res, next)=>{
                 error: "Password don't match"
             })
         }
+    try{
         const user = await User.findOne({
             username: req.body.username
         });
@@ -52,6 +57,30 @@ export const signup = async (req,res, next)=>{
         }
     } catch(error){
         console.log("Error in signup controller", error.message);
+        res.status(500).json({error:"Internal Server Error"});
+    }
+}
+
+export const signin = async(req, res) =>{
+    const { success } = signinBody.safeParse(req.body)
+    if (!success) {
+        return res.status(411).json({
+            message: "Incorrect inputs"
+        });
+    }
+    try{
+        const validUser = await User.findOne({username: req.body.username});
+        if(!validUser){
+            return res.status(400).json({error: "Invalid username or password"});
+        }
+        const validPassword = await bcrypt.compare(req.body.password, validUser?.password);
+        if(!validPassword){
+            return res.status(400).json({error: "Invalid username or password"});
+        }
+
+        generateTokenAndSetCookie(validUser._id, validUser, res);
+    } catch(error){
+        console.log("Error in signin controller", error.message);
         res.status(500).json({error:"Internal Server Error"});
     }
 }
