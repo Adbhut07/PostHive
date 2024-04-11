@@ -1,13 +1,22 @@
 import { TextInput,Label,Button, Spinner } from 'flowbite-react';
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import toast from "react-hot-toast"
 import {Link, useNavigate} from 'react-router-dom'
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { signInStart, signInSuccess, signInFailure} from '../redux/user/userSlice.js';
 
 function SignIn() {
   const [formData, setFormData] = useState({});
-  const [loading, setLoading] = useState(false);
+  const {loading, error:errorMessage} = useSelector(state => state.user);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if(errorMessage) {
+        toast.error(errorMessage);
+    }
+  }, [errorMessage]); // Trigger toast.error only when errorMessage changes
 
   const handleChange = (e)=>{
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
@@ -19,25 +28,25 @@ function SignIn() {
     if(!success)
       return;
 
-    setLoading(true);
     try {
+      dispatch(signInStart());
       const res = await axios.post("/api/auth/signin", formData, {
         headers: { "Content-Type": "application/json" },
       });
 
       if (res.status === 200) {
+        dispatch(signInSuccess(res.data)); // Dispatch signInSuccess with response data
         navigate("/");
+      } else {
+        dispatch(signInFailure(res.data.message)); // Dispatch signInFailure with error message
       }
     } catch (error) {
-      if (error.response && error.response.status === 400) {
-        toast.error(error.response.data.error); // Display specific error message from server
-      } else {
-        toast.error("An error occurred. Please try again later.");
-      }
-    } finally {
-      setLoading(false);
-    }
+      dispatch(signInFailure(error.response.data.error));
+    } 
   }
+
+  
+
   return (
     <div className="min-h-screen mt-20">
       <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5">
