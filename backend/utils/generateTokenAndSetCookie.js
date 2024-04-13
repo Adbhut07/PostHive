@@ -5,15 +5,13 @@ const generateTokenAndSetCookie = (userId,user,res)=>{
         expiresIn: '15d'
     });
 
+    const {password, ...rest} = user._doc;
+
     res.status(200).cookie("jwt", token,{
         maxAge: 15*24*60*1000, //in ,milliSeconds
         httpOnly: true,  // prevent xss attacks cross-site scripting attacks
         sameSite: "strict", // CSRF attacks cross-site request forgery attack
-    }).json({
-        _id: user._id,
-        username: user.username,
-        email: user.email,
-    });
+    }).json(rest);
 }
 
 export default generateTokenAndSetCookie;

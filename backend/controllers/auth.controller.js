@@ -44,14 +44,11 @@ export const signup = async (req,res)=>{
             password: hashedPassword
         });
         if (newUser) {
+            await newUser.save();
             //generating jwt
-          generateTokenAndSetCookie(newUser._id, res);
+          generateTokenAndSetCookie(newUser._id, newUser, res);
 
-          await newUser.save();
-
-          res.status(201).json({
-            message: "Signup successful"
-          });
+          
         } else {
             res.status(400).json({error: "Invalid user data"});
         }
@@ -81,6 +78,35 @@ export const signin = async(req, res) =>{
         generateTokenAndSetCookie(validUser._id, validUser, res);
     } catch(error){
         console.log("Error in signin controller", error.message);
+        res.status(500).json({error:"Internal Server Error"});
+    }
+}
+
+export const google = async (req, res)=>{
+    const {email, name, googlePhotoUrl} = req.body;
+    try {
+        const user = await User.findOne({username: name});
+        if(user){
+            generateTokenAndSetCookie(user._id, user, res);
+            return;
+        }
+        else{
+            const generatedRandomPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(generatedRandomPassword, salt);
+
+            const newUser = new User({
+                username: name.toLowerCase().split(' ').join('') + Math.random().toString(9).slice(-4),
+                email,
+                password: hashedPassword,
+                profilePicture: googlePhotoUrl,
+              });
+              await newUser.save();
+
+              generateTokenAndSetCookie(newUser._id, newUser, res);
+        }
+    } catch(error) {
+        console.log("Error in googleAuth controller", error.message);
         res.status(500).json({error:"Internal Server Error"});
     }
 }
