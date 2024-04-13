@@ -85,7 +85,7 @@ export const signin = async(req, res) =>{
 export const google = async (req, res)=>{
     const {email, name, googlePhotoUrl} = req.body;
     try {
-        const user = await User.findOne({username: name});
+        const user = await User.findOne({email: email});
         if(user){
             generateTokenAndSetCookie(user._id, user, res);
             return;
