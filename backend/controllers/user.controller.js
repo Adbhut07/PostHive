@@ -47,8 +47,18 @@ export const updateUser = async(req, res) =>{
         const { password, ...rest } = updatedUser._doc;
         res.status(200).json(rest);
     } catch (error) {
-        console.log("Error in signup controller", error.message);
         res.status(500).json({error:"Internal Server Error"}); 
     }
+}
 
+export const deleteUser = async(req,res) =>{
+  if(req.user.userId !== req.params.userId){
+    return res.status(403).json({error: "you are not allowed to delete this user"});
+  }
+  try{
+    await User.findByIdAndDelete(req.params.userId);
+    res.status(200).json('User has been deleted');
+  } catch(error){
+    res.status(500).json({error:"Internal Server Error"}); 
+  }
 }
