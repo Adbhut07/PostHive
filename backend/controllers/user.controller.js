@@ -46,9 +46,9 @@ export const updateUser = async(req, res) =>{
         );
         const { password, ...rest } = updatedUser._doc;
         res.status(200).json(rest);
-      } catch (error) {
+    } catch (error) {
         console.log("Error in signup controller", error.message);
         res.status(500).json({error:"Internal Server Error"}); 
-      }
+    }
 
 }
