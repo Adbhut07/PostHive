@@ -62,3 +62,11 @@ export const deleteUser = async(req,res) =>{
     res.status(500).json({error:"Internal Server Error"}); 
   }
 }
+
+export const signOut = async(req,res) =>{
+  try {
+    res.clearCookie('jwt').status(200).json('User has been sign out');
+  } catch (error) {
+    res.status(500).json({error:"Internal Server Error"});  
+  }
+}

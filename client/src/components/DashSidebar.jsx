@@ -9,7 +9,7 @@ import {
 } from 'react-icons/hi';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-//import { signoutSuccess } from '../redux/user/userSlices';
+import { signOutSuccess } from '../redux/user/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function DashSidebar() {
@@ -24,16 +24,16 @@ export default function DashSidebar() {
       setTab(tabFromUrl);
     }
   }, [location.search]);
-  const handleSignout = async () => {
+  const handleSignOut = async () => {
     try {
       const res = await fetch('/api/user/signout', {
         method: 'POST',
       });
       const data = await res.json();
-      if (!res.ok) {
+      if (res.status !== 200) {
         console.log(data.message);
       } else {
-        dispatch(signoutSuccess());
+        dispatch(signOutSuccess());
       }
     } catch (error) {
       console.log(error.message);
@@ -101,7 +101,7 @@ export default function DashSidebar() {
           <Sidebar.Item
             icon={HiArrowSmRight}
             className='cursor-pointer'
-            onClick={handleSignout}
+            onClick={handleSignOut}
           >
             Sign Out
           </Sidebar.Item>
