@@ -1,6 +1,7 @@
 import { Button, TextInput, Alert, Modal, ModalBody } from 'flowbite-react'
 import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 import {getDownloadURL, getStorage, ref, uploadBytesResumable} from 'firebase/storage'
 import { app } from '../firebase';
 import toast from "react-hot-toast"
@@ -186,7 +187,18 @@ function DashProfile() {
         <TextInput type='text' id='email' placeholder='email' defaultValue={currentUser.email} onChange={handleChange}/>
         <TextInput type='text' id='password' placeholder='password' onChange={handleChange} />
 
-        <Button type='submit' gradientDuoTone='purpleToBlue' outline >Update</Button>
+        <Button type='submit' gradientDuoTone='purpleToBlue' outline disabled={loading || imageFileUploading}>{loading? "Loading..." : "Update"}</Button>
+        {currentUser && (
+          <Link to={'/createpost'}>
+            <Button
+              type='button'
+              gradientDuoTone='purpleToPink'
+              className='w-full'
+            >
+              Create a post
+            </Button>
+          </Link>
+        )}
       </form>
 
       <div className='text-red-500 flex justify-between mt-5'>

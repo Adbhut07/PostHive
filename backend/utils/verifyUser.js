@@ -3,7 +3,7 @@ import { errorHandler } from './error.js';
 
 export const verifyToken = (req, res, next) =>{
     try {
-      const token = req.cookies.jwt;
+      const token = req.cookies.jwt;   
       if (!token) {
         return next(errorHandler(401, "Unauthorized - No Token Provided"));
       }
