@@ -10,6 +10,7 @@ import { Toaster } from "react-hot-toast";
 import Footer from './components/Footer';
 import PrivateRoute from './components/PrivateRoute'
 import CreatePost from './pages/CreatePost'
+import UpdatePost from './pages/UpdatePost'
 
 function App() {
 
@@ -24,9 +25,8 @@ function App() {
         <Route path='/signin' element={<Signin />} />
         <Route element={<PrivateRoute />}>
           <Route path='/dashboard' element={<Dashboard />} />  
-        </Route>
-        <Route element={<PrivateRoute />}>
-          <Route path='/createpost' element={<CreatePost />} />  
+          <Route path='/createpost' element={<CreatePost />} />
+          <Route path='/update-Post/:postId' element={<UpdatePost />} />
         </Route>
         <Route path='/projects' element={<Projects />} />
       </Routes>

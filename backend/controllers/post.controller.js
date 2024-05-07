@@ -105,3 +105,33 @@ export const getPostsByUser = async (req, res) => {
     }
 };
 
+export const deletePost = async(req,res)=>{
+    if(req.user.userId !== req.params.userId){
+        return res.status(403).json("You are not allowed to delete this post");
+    }
+    try {
+        await Post.findByIdAndDelete(req.params.postId);
+        res.status(200).json("The post has been deleted");
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+export const updatePost = async (req, res) => {
+  if (req.user.userId !== req.params.userId) {
+    return res.status(403).json("You are not allowed to update this post");
+  }
+  try {
+    const updatedPost = await Post.findByIdAndUpdate(req.params.postId, {
+      $set: {
+        title: req.body.title,
+        category: req.body.category,
+        content: req.body.content,
+        image: req.body.image
+      }
+    }, {new: true});
+    res.status(200).json(updatedPost);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
