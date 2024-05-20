@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { Button, Textarea } from 'flowbite-react';
 import { set } from 'mongoose';
 
-function Comment({comment, onLike, onEdit}) {
+function Comment({comment, onLike, onEdit, onDelete}) {
   const [user, setUser] = useState({});
   const {currentUser} = useSelector((state => state.user));
   const [isEditing, setIsEditing] = useState(false);
