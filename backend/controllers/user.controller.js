@@ -1,10 +1,6 @@
 import bcrypt from 'bcryptjs';
 import User from '../models/user.model.js';
 
-export const test = (req,res)=>{
-    res.json({message: "api is working"})
-}
-
 export const updateUser = async(req, res) =>{
     if(req.user.userId !== req.params.userId){
         return res.status(403).json({error: "you are not allowed to update this user"});
