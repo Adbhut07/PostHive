@@ -1,6 +1,6 @@
 import { Avatar, Button, Dropdown, Navbar,TextInput } from 'flowbite-react'
-import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import{ AiOutlineSearch } from 'react-icons/ai'
 import { FaMoon, FaSun } from 'react-icons/fa'
 import { useSelector,useDispatch } from 'react-redux'
@@ -9,8 +9,21 @@ import { signOutSuccess } from '../redux/user/userSlice'
 function Header() {
   const path = useLocation().pathname;   
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {currentUser} = useSelector(state => state.user); 
   const {theme} = useSelector(state => state.theme);
+  const [searchTerm, setSearchTerm] = useState('');
+  const location = useLocation(); 
+
+  console.log(searchTerm);
+  useEffect(() => {
+   const urlParams = new URLSearchParams(location.search);
+   const searchTermFromURL = urlParams.get('searchTerm');
+   if(searchTermFromURL){
+    setSearchTerm(searchTermFromURL);
+   }
+  }, [location.search])
+  
 
   const handleSignOut = async() =>{
     try {
@@ -28,6 +41,13 @@ function Header() {
       console.log(error.message);
     }
   }
+  const handleSubmit = (e)=> {
+    e.preventDefault();
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set('searchTerm', searchTerm); 
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`)
+  }
 
   return (
     <Navbar className='border-b-2'>
@@ -35,12 +55,14 @@ function Header() {
         <span className='px-1.5 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white'>Post</span>
         Hive
       </Link>
-      <form>
+      <form onSubmit={handleSubmit}>
         <TextInput 
         type='text'
         placeholder='Search...'
         rightIcon={AiOutlineSearch}
         className='hidden lg:inline'
+        value={searchTerm}
+        onChange={(e)=> setSearchTerm(e.target.value)}
          />
       </form>
       <Button className='w-12 h-10 lg:hidden' color='gray' pill>
