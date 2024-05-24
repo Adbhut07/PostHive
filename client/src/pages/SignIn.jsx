@@ -9,9 +9,15 @@ import OAuth from '../components/OAuth'
 
 function SignIn() {
   const [formData, setFormData] = useState({});
-  const {loading, error:errorMessage} = useSelector(state => state.user);
+  const {loading, error:errorMessage, currentUser} = useSelector(state => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (currentUser) {
+      navigate('/');
+    }
+  }, [currentUser, navigate]);
 
   useEffect(() => {
     if(errorMessage) {

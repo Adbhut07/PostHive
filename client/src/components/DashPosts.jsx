@@ -1,7 +1,7 @@
 import React from 'react'
 import {useSelector} from 'react-redux'
 import { useState,useEffect } from 'react';
-import { Modal, Table, Button } from 'flowbite-react';
+import { Modal, Table, Button, Spinner } from 'flowbite-react';
 import { Link } from 'react-router-dom';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { set } from 'mongoose'; 
@@ -12,9 +12,11 @@ function DashPosts() {
     const [showMore, setShowMore] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [postIdToDelete, setPostIdToDelete] = useState('');
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchPosts = async()=>{
+          setLoading(true);
             try{
                 const res = await fetch(`/api/post/getposts?userId=${currentUser._id}`);
                 const data = await res.json();
@@ -23,9 +25,11 @@ function DashPosts() {
                     if (data.posts.length < 9) {
                         setShowMore(false);
                     }
+                    setLoading(false);
                 }
             } catch(error){
                 console.log(error);
+                setLoading(false);
             }
         }
         if(currentUser){
@@ -72,9 +76,23 @@ function DashPosts() {
           console.log(error.message);
         }
       };
+
+    //   if (loading) {
+    //     return (
+    //         <div className='flex justify-center items-center min-h-screen'>
+    //             <Spinner size='xl' />
+    //         </div>
+    //     );
+    // }
     
   return (
     <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
+      {loading &&
+        <div className='flex justify-center items-center min-h-screen'>
+        <Spinner size='xl' />
+        </div>
+      }
+
         {currentUser && userPosts.length > 0 ? (
           <>
             <Table hoverable className='shadow-md'>

@@ -20,33 +20,37 @@ const HeroSection = () => {
               View all posts
             </Link>
           </button>
-          <button className="btn btn-secondary">Subscribe Now</button>
+          <button className="btn btn-secondary">
+          <a href="https://github.com/Adbhut07" target="_blank" rel="noopener noreferrer">
+            Subscribe Now
+          </a>
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
-const Categories = () => {
-  return (
-    <div className="bg-gray-100 py-20 dark:bg-slate-800">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-8">Categories</h2>
-        <div className="flex text-black justify-center">
-          <div className="bg-white rounded-lg shadow-md p-6 mr-4">
-            <h3 className="text-xl font-semibold mb-4">Technology</h3>
-          </div>
-          <div className="bg-white rounded-lg shadow-md p-6 mr-4">
-            <h3 className="text-xl font-semibold mb-4">Lifestyle</h3>
-          </div>
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-xl font-semibold mb-4">Travel</h3>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+// const Categories = () => {
+//   return (
+//     <div className="bg-gray-100 py-20 dark:bg-slate-800">
+//       <div className="container mx-auto px-4">
+//         <h2 className="text-3xl font-bold mb-8">Categories</h2>
+//         <div className="flex text-black justify-center">
+//           <div className="bg-white rounded-lg shadow-md p-6 mr-4">
+//             <h3 className="text-xl font-semibold mb-4">Technology</h3>
+//           </div>
+//           <div className="bg-white rounded-lg shadow-md p-6 mr-4">
+//             <h3 className="text-xl font-semibold mb-4">Lifestyle</h3>
+//           </div>
+//           <div className="bg-white rounded-lg shadow-md p-6">
+//             <h3 className="text-xl font-semibold mb-4">Travel</h3>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 
 
 function Home(){
@@ -91,7 +95,7 @@ function Home(){
     </div>
     
 
-    <Categories />
+    {/* <Categories /> */}
     </>
 
   )
