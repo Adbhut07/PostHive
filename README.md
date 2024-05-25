@@ -57,13 +57,13 @@ PostHive is a blogging application built using the MERN stack (MongoDB, Express.
 1. **Start the backend server:**
     ```bash
     cd backend
-    npm run dev
+    npm start
     ```
 
 2. **Start the frontend server:**
     ```bash
     cd ../client
-    npm run dev
+    npm start
     ```
 
 3. The application should now be running. Open your browser and navigate to `http://localhost:3000`.
@@ -87,6 +87,9 @@ BlogApp/
 ├── package.json
 └── README.md
 ```
+
+## Future Goals
+Implemetation of Payment gateway to make application commercial
 
 ## Contributing
 
