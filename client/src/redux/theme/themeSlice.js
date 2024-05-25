@@ -2,7 +2,7 @@ import {createSlice } from '@reduxjs/toolkit'
 import { ToggleSwitch } from 'flowbite-react'
 
 const initialState ={
-    theme: 'light'
+    theme: 'dark'
 }
 
 const themeSlice = createSlice({
