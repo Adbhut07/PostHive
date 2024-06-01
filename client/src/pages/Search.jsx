@@ -19,62 +19,47 @@ export default function Search() {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
-    const searchTermFromUrl = urlParams.get('searchTerm');
-    const sortFromUrl = urlParams.get('sort');
-    const categoryFromUrl = urlParams.get('category');
-    if (searchTermFromUrl || sortFromUrl || categoryFromUrl) {
-      setSidebarData({
-        ...sidebarData,
-        searchTerm: searchTermFromUrl,
-        sort: sortFromUrl,
-        category: categoryFromUrl,
-      });
-    }
+    const searchTermFromUrl = urlParams.get('searchTerm') || '';
+    const sortFromUrl = urlParams.get('sort') || 'desc';
+    const categoryFromUrl = urlParams.get('category') || 'uncategorized';
+    setSidebarData({
+      searchTerm: searchTermFromUrl,
+      sort: sortFromUrl,
+      category: categoryFromUrl,
+    });
 
     const fetchPosts = async () => {
       setLoading(true);
-      const searchQuery = urlParams.toString();
-      const res = await fetch(`/api/post/getposts?${searchQuery}`);
-      if (res.status!==200) {
-        setLoading(false);
-        return;
+      let apiEndpoint = `/api/post/getposts?searchTerm=${searchTermFromUrl}&sort=${sortFromUrl}`;
+      if (categoryFromUrl !== 'uncategorized') {
+        apiEndpoint += `&category=${categoryFromUrl}`;
       }
-      if (res.status===200) {
+      const res = await fetch(apiEndpoint);
+      setLoading(false);
+      if (res.status === 200) {
         const data = await res.json();
         setPosts(data.posts);
-        setLoading(false);
-        if (data.posts.length === 9) {
-          setShowMore(true);
-        } else {
-          setShowMore(false);
-        }
+        setShowMore(data.posts.length === 9);
       }
     };
     fetchPosts();
   }, [location.search]);
 
   const handleChange = (e) => {
-    if (e.target.id === 'searchTerm') {
-      setSidebarData({ ...sidebarData, searchTerm: e.target.value });
-    }
-    if (e.target.id === 'sort') {
-      const order = e.target.value || 'desc';
-      setSidebarData({ ...sidebarData, sort: order });
-    }
-    if (e.target.id === 'category') {
-      const category = e.target.value || 'uncategorized';
-      setSidebarData({ ...sidebarData, category });
-    }
+    const { id, value } = e.target;
+    setSidebarData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const urlParams = new URLSearchParams(location.search);
+    const urlParams = new URLSearchParams();
     urlParams.set('searchTerm', sidebarData.searchTerm);
     urlParams.set('sort', sidebarData.sort);
     urlParams.set('category', sidebarData.category);
-    const searchQuery = urlParams.toString();
-    navigate(`/search?${searchQuery}`);
+    navigate(`/search?${urlParams.toString()}`);
   };
 
   const handleShowMore = async () => {
@@ -84,17 +69,10 @@ export default function Search() {
     urlParams.set('startIndex', startIndex);
     const searchQuery = urlParams.toString();
     const res = await fetch(`/api/post/getposts?${searchQuery}`);
-    if (res.status!==200) {
-      return;
-    }
-    if (res.status===200) {
+    if (res.status === 200) {
       const data = await res.json();
-      setPosts([...posts, ...data.posts]);
-      if (data.posts.length === 9) {
-        setShowMore(true);
-      } else {
-        setShowMore(false);
-      }
+      setPosts((prevPosts) => [...prevPosts, ...data.posts]);
+      setShowMore(data.posts.length === 9);
     }
   };
 
@@ -102,7 +80,7 @@ export default function Search() {
     <div className='flex flex-col md:flex-row'>
       <div className='p-7 border-b md:border-r md:min-h-screen border-gray-500'>
         <form className='flex flex-col gap-8' onSubmit={handleSubmit}>
-          <div className='flex   items-center gap-2'>
+          <div className='flex items-center gap-2'>
             <label className='whitespace-nowrap font-semibold'>
               Search Term:
             </label>
@@ -149,7 +127,6 @@ export default function Search() {
           )}
           {loading && <p className='text-xl text-gray-500'>Loading...</p>}
           {!loading &&
-            posts &&
             posts.map((post) => <PostCard key={post._id} post={post} />)}
           {showMore && (
             <button

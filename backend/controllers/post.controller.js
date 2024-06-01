@@ -39,6 +39,8 @@ export const getPosts = async (req, res) => {
         ],
       }),
     };
+
+
     const posts = await Post.find(query)
       .populate('author', 'username')
       .sort({ updatedAt: sortDirection })
