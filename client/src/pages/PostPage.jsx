@@ -5,6 +5,8 @@ import CommentSection from '../components/CommentSection';
 import PostCard from '../components/PostCard';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
+import parse from "html-react-parser";
+
 
 function PostPage() {
     const { postSlug } = useParams();
@@ -101,8 +103,8 @@ function PostPage() {
                     </div>
                     <div
                         className="p-3 max-w-2xl mx-auto w-full post-content"
-                        dangerouslySetInnerHTML={{ __html: post.content }}
-                    ></div>
+                        // dangerouslySetInnerHTML={{ __html: post.content }}
+                    >{parse(post.content)}</div>
                     <CommentSection postId={post._id} />
                 </>
             )}

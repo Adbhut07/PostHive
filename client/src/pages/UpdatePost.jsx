@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, Button, FileInput, Select, TextInput } from 'flowbite-react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import { Alert, Button, FileInput, Select, TextInput,Spinner } from 'flowbite-react';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../firebase';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import hljs from 'highlight.js';
-import 'highlight.js/styles/github.css';
-import QuillEditor from '../components/QuillEditor';
 
 function UpdatePost() {
   const [file, setFile] = useState(null);
@@ -27,19 +26,30 @@ function UpdatePost() {
   const { currentUser } = useSelector((state) => state.user);
 
   const modules = {
-    syntax: {
-      highlight: text => hljs.highlightAuto(text).value,
-    },
     toolbar: [
       [{ header: [1, 2, false] }],
       ["bold", "italic", "underline", "strike", "blockquote"],
-      [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
-      [{ "script": "sub" }, { "script": "super" }],
-      ['code-block'],
-      ["link", "image"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["link", "color", "image"],
+      [{ "code-block": true }],
       ["clean"],
     ],
   };
+  const formats = [
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "link",
+    "indent",
+    "image",
+    "code-block",
+    "color",
+  ];
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -131,7 +141,11 @@ function UpdatePost() {
   };
 
   if (!formData._id) {
-    return <div>Loading...</div>;
+    return <div>Loading...
+      <div className="flex justify-center items-center min-h-screen">
+        <Spinner size="xl" />
+      </div>
+    </div>;
   }
 
   return (
@@ -199,11 +213,12 @@ function UpdatePost() {
             className="w-full h-72 object-cover"
           />
         )}
-        <QuillEditor
+        <ReactQuill
           theme="snow"
           placeholder="write something..."
           className="h-72 mb-10"
           modules={modules}
+          formats={formats}
           required
           value={formData.content}
           onChange={(value) => {
