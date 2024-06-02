@@ -13,7 +13,8 @@ PostHive is a blogging application built using the MERN stack (MongoDB, Express.
 ## Prerequisites
 
 - Node.js (v14 or higher)
-- MongoDB
+- MongoDB cluster
+- Firebase cloud storage
 
 ## Installation
 
@@ -49,21 +50,21 @@ PostHive is a blogging application built using the MERN stack (MongoDB, Express.
    - Create a `.env` file in the `client` directory.
    - Add the following environment variables:
      ```
-     REACT_APP_API_URL=http://localhost:5000
+     VITE_FIREBASE_API_KEY= "your firebase api key"
      ```
 
 ## Running the Application
 
 1. **Start the backend server:**
     ```bash
-    cd backend
-    npm start
+    cd blogApp
+    npm run dev
     ```
 
 2. **Start the frontend server:**
     ```bash
     cd ../client
-    npm start
+    npm run dev
     ```
 
 3. The application should now be running. Open your browser and navigate to `http://localhost:3000`.
