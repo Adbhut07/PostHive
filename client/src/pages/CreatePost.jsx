@@ -16,6 +16,33 @@ function CreatePost() {
     const [publishError, setPublishError] = useState();
     const navigate = useNavigate();
 
+
+    const modules = {
+      toolbar: [
+        [{ header: [1, 2, false] }],
+        ["bold", "italic", "underline", "strike", "blockquote"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["link", "color", "image"],
+        [{ "code-block": true }],
+        ["clean"],
+      ],
+    };
+    const formats = [
+      "header",
+      "bold",
+      "italic",
+      "underline",
+      "strike",
+      "blockquote",
+      "list",
+      "bullet",
+      "link",
+      "indent",
+      "image",
+      "code-block",
+      "color",
+    ];
+
     const handleUploadImage = async()=>{
         try {
             if(!file){
@@ -93,7 +120,7 @@ function CreatePost() {
             <option value="uncategorized">Select a category</option>
             <option value="javascript">Javascript</option>
             <option value="reactjs">React.js</option>
-            <option value="nextjs">Next.js</option>
+            <option value="nodejs">Node.js</option>
             <option value="androidDevelopment">Android Development</option>
             <option value="iosDevelopment">Ios Development</option>
             <option value="web3">Web3</option>
@@ -141,6 +168,8 @@ function CreatePost() {
           placeholder="write something..."
           className="h-72 mb-10"
           required
+          modules={modules}
+          formats={formats}
           onChange={(value) => {
             setFormData({ ...formData, content: value });
           }}
