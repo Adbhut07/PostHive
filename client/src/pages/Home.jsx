@@ -21,7 +21,7 @@ const HeroSection = () => {
             </Link>
           </button>
           
-          <Link to='/dashboard?tab=profile'>
+          <Link to='/createpost'>
             <button className="btn btn-secondary">Create a Post</button>
           </Link>
           
