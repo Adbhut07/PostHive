@@ -20,11 +20,11 @@ const HeroSection = () => {
               View all posts
             </Link>
           </button>
-          <button className="btn btn-secondary">
-          <a href="https://github.com/Adbhut07" target="_blank" rel="noopener noreferrer">
-            Subscribe Now
-          </a>
-          </button>
+          
+          <Link to='/dashboard?tab=profile'>
+            <button className="btn btn-secondary">Create a Post</button>
+          </Link>
+          
         </div>
       </div>
     </div>
