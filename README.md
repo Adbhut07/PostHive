@@ -3,6 +3,8 @@
 
 PostHive is a blogging application built using the MERN stack (MongoDB, Express.js, React, Node.js).
 
+Live link : https://posthive.onrender.com/
+
 ## Features
 
 - User authentication (register, login, logout)
