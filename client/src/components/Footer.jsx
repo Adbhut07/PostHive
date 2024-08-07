@@ -65,7 +65,7 @@ export default function FooterComponent() {
         </div>
         <Footer.Divider />
         <div className='w-full sm:flex sm:items-center sm:justify-between'>
-          <Footer.Copyright href='#' by="Adbhut Stasangi" year={new Date().getFullYear()}/>
+          <Footer.Copyright href='#' by="Adbhut Satsangi" year={new Date().getFullYear()}/>
           <div className='flex gap-6 sm:mt-0 mt-4 sm:justify-center'>
             <Footer.Icon href='https://instagram.com/satsangi_adbhut?igshid=Mzc0YWU1OWY=' icon={BsInstagram}/>
             <Footer.Icon href='https://www.linkedin.com/in/adbhut-satsangi-a96808242' icon={BsTwitter}/>
